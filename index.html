@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Temple Run - Black & Gold Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <div id="game-container">
+    <!-- WebGL Canvas will be injected here -->
+  </div>
+
+  <!-- Ambient Golden Particle Canvas overlay for Menu -->
+  <canvas id="menu-particles"></canvas>
+
+  <!-- UI Overlay -->
+  <div id="ui-layer">
+    
+    <!-- MAIN MENU -->
+    <div id="main-menu" class="screen active">
+      <div class="glow-orb"></div>
+      <div class="logo-container">
+        <div class="sub-title">ANCIENT TREASURE RUNNER</div>
+        <h1 class="main-title">TEMPLE RUN</h1>
+        <div class="gold-badge">OBSIDIAN & GOLD EDITION</div>
+      </div>
+
+      <div class="high-score-banner">
+        <span class="icon">🏆</span>
+        <span class="label">HIGH SCORE:</span>
+        <span id="menu-high-score">0</span>
+      </div>
+
+      <div class="menu-actions">
+        <button id="btn-start" class="gold-btn glow-anim">
+          <span class="btn-shine"></span>
+          <span>START RUN</span>
+        </button>
+      </div>
+
+      <!-- Controls Guide -->
+      <div class="controls-card">
+        <h3>CONTROLS</h3>
+        <div class="keys-grid">
+          <div class="key-item"><span class="key">←</span><span class="key">→</span> or <span class="key">A</span><span class="key">D</span> <span>Lane Shift</span></div>
+          <div class="key-item"><span class="key">↑</span> or <span class="key">W</span> <span>Jump</span></div>
+          <div class="key-item"><span class="key">↓</span> or <span class="key">S</span> <span>Slide</span></div>
+          <div class="key-item"><span class="key">Mobile</span> <span>Swipe Screen</span></div>
+        </div>
+      </div>
+
+      <div class="audio-toggle-bar">
+        <button id="btn-audio-toggle" class="icon-btn" title="Toggle Sound">
+          <span id="audio-icon">🔊</span> SOUND ON
+        </button>
+      </div>
+    </div>
+
+    <!-- IN-GAME HUD -->
+    <div id="hud-screen" class="screen">
+      <div class="hud-top-bar">
+        <div class="hud-stat score-stat">
+          <span class="stat-label">SCORE</span>
+          <span id="hud-score" class="stat-val">0</span>
+        </div>
+
+        <div class="hud-center">
+          <div id="hud-multiplier" class="multiplier-badge">1X</div>
+        </div>
+
+        <div class="hud-stat coin-stat">
+          <span class="stat-icon">🪙</span>
+          <span id="hud-coins" class="stat-val">0</span>
+        </div>
+      </div>
+
+      <div class="hud-secondary-bar">
+        <div class="hud-stat distance-stat">
+          <span id="hud-distance">0</span> <small>m</small>
+        </div>
+        <button id="btn-pause" class="icon-btn pause-btn">⏸️</button>
+      </div>
+
+      <!-- Active Powerup HUD Bar -->
+      <div id="powerup-hud" class="powerup-container hidden">
+        <div class="powerup-header">
+          <span id="powerup-name">MAGNET ACTIVE</span>
+        </div>
+        <div class="powerup-progress-track">
+          <div id="powerup-progress-bar" class="powerup-progress-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAUSE MENU -->
+    <div id="pause-screen" class="screen">
+      <div class="modal-box">
+        <h2 class="modal-title">GAME PAUSED</h2>
+        <div class="modal-actions">
+          <button id="btn-resume" class="gold-btn">RESUME</button>
+          <button id="btn-restart-pause" class="gold-btn secondary">RESTART</button>
+          <button id="btn-quit" class="gold-btn secondary">MAIN MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME OVER SCREEN -->
+    <div id="game-over-screen" class="screen">
+      <div class="modal-box game-over-box">
+        <div class="game-over-header">
+          <span class="skull-icon">💀</span>
+          <h2 class="modal-title pulse-text">GAME OVER</h2>
+        </div>
+
+        <div id="new-record-banner" class="new-record hidden">
+          🌟 NEW HIGH SCORE! 🌟
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="card-label">FINAL SCORE</span>
+            <span id="go-score" class="card-val gold-text">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="card-label">DISTANCE</span>
+            <span id="go-distance" class="card-val">0 m</span>
+          </div>
+          <div class="stat-card">
+            <span class="card-label">COINS COLLECTED</span>
+            <span id="go-coins" class="card-val">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="card-label">BEST RECORD</span>
+            <span id="go-high-score" class="card-val">0</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="btn-restart" class="gold-btn glow-anim">
+            <span>RUN AGAIN</span>
+          </button>
+          <button id="btn-menu-from-go" class="gold-btn secondary">
+            <span>MAIN MENU</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Standalone Game Engine -->
+  <script src="app.js"></script>
+</body>
+</html>
